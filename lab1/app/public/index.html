@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HRU DAC Shell</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Auth view -->
+  <main id="auth-view" class="auth" hidden>
+    <h1>HRU DAC Shell</h1>
+    <p class="muted">Discretionary access control with an HRU security kernel.</p>
+    <div class="auth-forms">
+      <form id="login-form" class="card">
+        <h2>Log in</h2>
+        <label>Name <input name="name" autocomplete="username" required></label>
+        <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+        <button type="submit">Log in</button>
+        <p class="error" data-error></p>
+      </form>
+      <form id="register-form" class="card">
+        <h2>Register</h2>
+        <label>Name <input name="name" autocomplete="username" pattern="[A-Za-z0-9._\-]{1,64}" required></label>
+        <label>Password <input name="password" type="password" autocomplete="new-password" minlength="4" maxlength="128" required></label>
+        <button type="submit">Register</button>
+        <p class="error" data-error></p>
+        <p class="ok" data-ok></p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Main view -->
+  <div id="main-view" hidden>
+    <header class="topbar">
+      <strong>HRU DAC Shell</strong>
+      <span class="spacer"></span>
+      <span>Signed in as <strong id="me-name"></strong></span>
+      <span id="admin-badge" class="badge" hidden>admin</span>
+      <button id="logout-btn" type="button">Log out</button>
+    </header>
+
+    <main class="content">
+      <section class="card">
+        <h2>Objects</h2>
+        <table>
+          <thead><tr><th>Name</th><th>Kind</th><th>My rights</th><th>Actions</th></tr></thead>
+          <tbody id="objects-body"></tbody>
+        </table>
+        <div id="object-panel" class="panel" hidden>
+          <h3 id="object-panel-title"></h3>
+          <pre id="object-content"></pre>
+          <div id="object-editor" hidden>
+            <textarea id="object-textarea" rows="8"></textarea>
+            <div class="row">
+              <button id="object-save" type="button">Save</button>
+              <button id="object-cancel" type="button" class="secondary">Cancel</button>
+            </div>
+          </div>
+          <p class="error" id="object-error"></p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Commands</h2>
+        <form id="command-form">
+          <label>Command <select id="command-select"></select></label>
+          <p class="muted" id="command-description"></p>
+          <div id="command-params"></div>
+          <button type="submit">Run</button>
+        </form>
+        <ul id="command-changes" class="changes"></ul>
+        <p class="error" id="command-error"></p>
+      </section>
+
+      <section class="card">
+        <h2>My capability list</h2>
+        <table>
+          <thead><tr><th>Object</th><th>Kind</th><th>Rights</th></tr></thead>
+          <tbody id="caps-body"></tbody>
+        </table>
+      </section>
+
+      <section id="admin-section" class="card" hidden>
+        <div class="row">
+          <h2>Admin</h2>
+          <span class="spacer"></span>
+          <button id="admin-refresh" type="button">Refresh</button>
+        </div>
+        <p class="error" id="admin-error"></p>
+        <h3>Access matrix</h3>
+        <div class="scroll"><table id="matrix-table" class="matrix"></table></div>
+        <div class="row">
+          <h3>Audit log</h3>
+          <span class="spacer"></span>
+          <label>Outcome
+            <select id="audit-outcome">
+              <option value="">all</option>
+              <option value="ALLOWED">ALLOWED</option>
+              <option value="DENIED">DENIED</option>
+            </select>
+          </label>
+        </div>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>ts</th><th>actor</th><th>event</th><th>action</th><th>args</th><th>outcome</th><th>reason</th></tr></thead>
+            <tbody id="audit-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
